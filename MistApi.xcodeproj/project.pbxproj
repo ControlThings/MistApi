@@ -14,6 +14,7 @@
 				3D5FE2142088D32D00A4C720 /* ShellScript */,
 			);
 			dependencies = (
+				3D5FE2172088D60B00A4C720 /* PBXTargetDependency */,
 			);
 			name = UniversalBuild;
 			productName = UniversalBuild;
@@ -172,7 +173,20 @@
 		3D2F4DD720889EBE00616E4E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D2F4DD520889EBE00616E4E /* LaunchScreen.storyboard */; };
 		3D2F4DDA20889EBE00616E4E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4DD920889EBE00616E4E /* main.m */; };
 		3D2F4DE02088A14D00616E4E /* libMistApi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAC75432085DDC400A9CEC7 /* libMistApi.a */; };
+		3D5FE2402088DE9500A4C720 /* WishRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DA02088810A00616E4E /* WishRequest.h */; };
+		3D5FE2412088DE9500A4C720 /* MistApiResponseHandler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DB02088810A00616E4E /* MistApiResponseHandler.h */; };
+		3D5FE2422088DE9500A4C720 /* MistRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DB12088810A00616E4E /* MistRequest.h */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3D5FE2162088D60B00A4C720 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3DAC753B2085DDC400A9CEC7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3DAC75422085DDC400A9CEC7;
+			remoteInfo = MistApi;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		3DAC75412085DDC400A9CEC7 /* CopyFiles */ = {
@@ -181,6 +195,9 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				3D5FE2402088DE9500A4C720 /* WishRequest.h in CopyFiles */,
+				3D5FE2412088DE9500A4C720 /* MistApiResponseHandler.h in CopyFiles */,
+				3D5FE2422088DE9500A4C720 /* MistRequest.h in CopyFiles */,
 				3D2F4DBF20889E6400616E4E /* IdentityFriendRequestAccept.h in CopyFiles */,
 				3D2F4DC020889E6400616E4E /* WldClear.h in CopyFiles */,
 				3D2F4DC120889E6400616E4E /* Signals.h in CopyFiles */,
@@ -416,6 +433,7 @@
 		3D2F4DD620889EBE00616E4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D2F4DD820889EBE00616E4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D2F4DD920889EBE00616E4E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3D5FE2152088D48A00A4C720 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3DAC75432085DDC400A9CEC7 /* libMistApi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMistApi.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -755,6 +773,7 @@
 		3DAC753A2085DDC400A9CEC7 = {
 			isa = PBXGroup;
 			children = (
+				3D5FE2152088D48A00A4C720 /* README.md */,
 				3D2F4D9F2088810A00616E4E /* MistApi */,
 				3D2F4D8C20887D5A00616E4E /* ios_port */,
 				3D2F4CF620887C4300616E4E /* src */,
@@ -881,7 +900,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Source: https://www.raywenderlich.com/41377/creating-a-static-library-in-ios-tutorial\n# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target MistApi ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target MistApi -configuration ${CONFIGURATION} -sdk iphonesimulator -arch x86_64 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n\n\nFINAL_DIR=${PROJECT_DIR}/build_universal\nmkdir -o ${FINAL_DIR}\ncp -R ${UNIVERSAL_OUTPUTFOLDER} ${FINAL_DIR}\necho \"warning: The output dir is: \" ${FINAL_DIR}";
+			shellScript = "# Source: https://www.raywenderlich.com/41377/creating-a-static-library-in-ios-tutorial\n# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target MistApi ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target MistApi -configuration ${CONFIGURATION} -sdk iphonesimulator -arch x86_64 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n\n\nFINAL_DIR=${PROJECT_DIR}/universal_lib\nrm -r ${FINAL_DIR}\ncp -R ${UNIVERSAL_OUTPUTFOLDER} ${FINAL_DIR}\necho \"warning: The output dir is: \" ${FINAL_DIR}";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1042,6 +1061,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3D5FE2172088D60B00A4C720 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3DAC75422085DDC400A9CEC7 /* MistApi */;
+			targetProxy = 3D5FE2162088D60B00A4C720 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		3D2F4DD020889EBC00616E4E /* Main.storyboard */ = {
