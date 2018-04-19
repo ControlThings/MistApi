@@ -143,7 +143,6 @@ static void generic_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
     mist_api = mist_api_init(mist_app);
     
     cbDictionary = [[NSMutableDictionary alloc] init];
-    wish_app_connected(wish_app, true);;
 }
 
 + (int)mistApiRequestWithBson:(bson *)reqBson callback:(id <MistApiResponseHandler>)cb {
@@ -192,9 +191,9 @@ static void generic_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
     wish_api_request_cancel(mist_api, rpcId);
 }
 
-+(void)initMistApp:(id) param {
++(void)connected:(id) param {
     
-    [MistApi startMistApi:@"iOS MistApi"];
+    wish_app_connected(wish_app, true);
     
 }
 

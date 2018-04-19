@@ -3,7 +3,7 @@
 ## static library build process
 
 * Select target "UniversalBuild", and perform "Build". The final output, static lib file (.a) and include files, will appear into MistApi/universal_lib
-* Note that the library is build "universally", so you can 
+* Note that the library is build "universally", so you can run both on simulator and iphone platforms.
 
 ## How to use in your app
 
@@ -18,7 +18,7 @@
 * Under target Build settings (all) > Search paths > header search paths add ${PROJECT_DIR}/lib/include as recursive
 * Under Build settings (all) > Search paths > library search paths, add ${PROJECT_DIR}/lib
 
-### Starting the system
+### Starting Wish and MistApi
 
 
 ## Information on how the project was set up in Xcode

@@ -14,6 +14,7 @@
 
 int ios_port_main(void);
 void ios_port_set_name(char *name);
+void ios_port_setup_platform(void);
 
 static NSThread *wishThread;
 static NSLock *appToCoreLock;
@@ -34,7 +35,7 @@ static BOOL launchedOnce = NO;
 -(void)wishTask:(NSString *)appName {
     //(char*) [[UIDevice currentDevice] name].UTF8String
     ios_port_set_name((char*) appName.UTF8String);
-    [self saveAppDocumentsPath];
+    
     
     ios_port_main();
     
@@ -42,6 +43,7 @@ static BOOL launchedOnce = NO;
 }
 
 - (void)launchWish:(NSString *)appName {
+    
     if (!launchedOnce) {
         launchedOnce = YES;
     }
@@ -50,6 +52,10 @@ static BOOL launchedOnce = NO;
                     format:@"Wish cannot be launched several times."];
     }
     
+    [self saveAppDocumentsPath];
+    ios_port_setup_platform();
+    
+    [MistApi startMistApi:@"MistApi"];
     appToCoreLock = [[NSLock alloc] init];
     wishThread = [[NSThread alloc] initWithTarget:self
                                          selector:@selector(wishTask:)
@@ -67,7 +73,7 @@ static BOOL launchedOnce = NO;
  This function is run in the context of the wish thread.
  */
 void port_service_ipc_connected(bool connected) {
-    [MistApi performSelectorOnMainThread:@selector(initMistApp:) withObject:nil waitUntilDone:false];
+    [MistApi performSelectorOnMainThread:@selector(connected:) withObject:nil waitUntilDone:false];
 }
 
 /* Send data to app, invoking a method on the main thread to transport the the data.

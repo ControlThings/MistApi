@@ -407,11 +407,7 @@ static void create_test_identities() {
     }
 }
 
-
-
-#define IO_BUF_LEN 1000
-
-int ios_port_main(void) {
+void ios_port_setup_platform(void) {
     wish_platform_set_malloc(malloc);
     wish_platform_set_realloc(realloc);
     wish_platform_set_free(free);
@@ -419,7 +415,7 @@ int ios_port_main(void) {
     wish_platform_set_rng(random);
     wish_platform_set_vprintf(vprintf);
     wish_platform_set_vsprintf(vsprintf);
-
+    
     wish_fs_set_open(my_fs_open);
     wish_fs_set_read(my_fs_read);
     wish_fs_set_write(my_fs_write);
@@ -427,10 +423,14 @@ int ios_port_main(void) {
     wish_fs_set_close(my_fs_close);
     wish_fs_set_rename(my_fs_rename);
     wish_fs_set_remove(my_fs_remove);
-
+    
     // Will provide some random, but not to be considered cryptographically secure
     seed_random_init();
-    
+}
+
+#define IO_BUF_LEN 1000
+
+int ios_port_main(void) {
 
     // Using default parameters.
 

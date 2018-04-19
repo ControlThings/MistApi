@@ -16,6 +16,6 @@
 +(int)wishApiRequestWithBson:(bson *)reqBson callback:(id <MistApiResponseHandler>)cb;
 +(void)wishApiCancel:(int) rpcId;
 
-+(void)initMistApp:(id) param;
++(void)connected:(id) param;
 +(void)sendToMistApp:(NSArray *) params;
 @end
