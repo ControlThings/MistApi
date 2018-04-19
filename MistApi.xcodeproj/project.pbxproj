@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		3D5FE20B2088C8E000A4C720 /* UniversalMistApi */ = {
+		3D5FE2102088D32900A4C720 /* UniversalBuild */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 3D5FE20C2088C8E100A4C720 /* Build configuration list for PBXAggregateTarget "UniversalMistApi" */;
+			buildConfigurationList = 3D5FE2112088D32900A4C720 /* Build configuration list for PBXAggregateTarget "UniversalBuild" */;
 			buildPhases = (
-				3D5FE20F2088C8F000A4C720 /* ShellScript */,
+				3D5FE2142088D32D00A4C720 /* ShellScript */,
 			);
 			dependencies = (
 			);
-			name = UniversalMistApi;
-			productName = UniversalMistApi;
+			name = UniversalBuild;
+			productName = UniversalBuild;
 		};
 /* End PBXAggregateTarget section */
 
@@ -828,7 +828,7 @@
 					3D2F4DC720889EBB00616E4E = {
 						CreatedOnToolsVersion = 9.3;
 					};
-					3D5FE20B2088C8E000A4C720 = {
+					3D5FE2102088D32900A4C720 = {
 						CreatedOnToolsVersion = 9.3;
 					};
 					3DAC75422085DDC400A9CEC7 = {
@@ -851,7 +851,7 @@
 			targets = (
 				3DAC75422085DDC400A9CEC7 /* MistApi */,
 				3D2F4DC720889EBB00616E4E /* MistApiTest */,
-				3D5FE20B2088C8E000A4C720 /* UniversalMistApi */,
+				3D5FE2102088D32900A4C720 /* UniversalBuild */,
 			);
 		};
 /* End PBXProject section */
@@ -870,7 +870,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3D5FE20F2088C8F000A4C720 /* ShellScript */ = {
+		3D5FE2142088D32D00A4C720 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1097,7 +1097,7 @@
 			};
 			name = Release;
 		};
-		3D5FE20D2088C8E100A4C720 /* Debug */ = {
+		3D5FE2122088D32900A4C720 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -1106,7 +1106,7 @@
 			};
 			name = Debug;
 		};
-		3D5FE20E2088C8E100A4C720 /* Release */ = {
+		3D5FE2132088D32900A4C720 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -1266,11 +1266,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3D5FE20C2088C8E100A4C720 /* Build configuration list for PBXAggregateTarget "UniversalMistApi" */ = {
+		3D5FE2112088D32900A4C720 /* Build configuration list for PBXAggregateTarget "UniversalBuild" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3D5FE20D2088C8E100A4C720 /* Debug */,
-				3D5FE20E2088C8E100A4C720 /* Release */,
+				3D5FE2122088D32900A4C720 /* Debug */,
+				3D5FE2132088D32900A4C720 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
