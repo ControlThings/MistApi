@@ -6,6 +6,20 @@
 	objectVersion = 50;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		3D5FE20B2088C8E000A4C720 /* UniversalMistApi */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 3D5FE20C2088C8E100A4C720 /* Build configuration list for PBXAggregateTarget "UniversalMistApi" */;
+			buildPhases = (
+				3D5FE20F2088C8F000A4C720 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = UniversalMistApi;
+			productName = UniversalMistApi;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		3D2F4C6D2085E89500616E4E /* x509_create.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4C252085E89400616E4E /* x509_create.c */; };
 		3D2F4C6E2085E89500616E4E /* x509_crt.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4C262085E89400616E4E /* x509_crt.c */; };
@@ -21,7 +35,6 @@
 		3D2F4C782085E89500616E4E /* cipher_wrap.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4C302085E89400616E4E /* cipher_wrap.c */; };
 		3D2F4C792085E89500616E4E /* des.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4C312085E89400616E4E /* des.c */; };
 		3D2F4C7A2085E89500616E4E /* ssl_cookie.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4C322085E89400616E4E /* ssl_cookie.c */; };
-		3D2F4C7B2085E89500616E4E /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4C332085E89400616E4E /* Makefile */; };
 		3D2F4C7C2085E89500616E4E /* ctr_drbg.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4C342085E89400616E4E /* ctr_drbg.c */; };
 		3D2F4C7D2085E89500616E4E /* aesni.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4C352085E89400616E4E /* aesni.c */; };
 		3D2F4C7E2085E89500616E4E /* dhm.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4C362085E89400616E4E /* dhm.c */; };
@@ -164,7 +177,7 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		3DAC75412085DDC400A9CEC7 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
@@ -194,7 +207,6 @@
 		3D2F4C302085E89400616E4E /* cipher_wrap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cipher_wrap.c; sourceTree = "<group>"; };
 		3D2F4C312085E89400616E4E /* des.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = des.c; sourceTree = "<group>"; };
 		3D2F4C322085E89400616E4E /* ssl_cookie.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ssl_cookie.c; sourceTree = "<group>"; };
-		3D2F4C332085E89400616E4E /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		3D2F4C342085E89400616E4E /* ctr_drbg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ctr_drbg.c; sourceTree = "<group>"; };
 		3D2F4C352085E89400616E4E /* aesni.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aesni.c; sourceTree = "<group>"; };
 		3D2F4C362085E89400616E4E /* dhm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dhm.c; sourceTree = "<group>"; };
@@ -443,7 +455,6 @@
 				3D2F4C302085E89400616E4E /* cipher_wrap.c */,
 				3D2F4C312085E89400616E4E /* des.c */,
 				3D2F4C322085E89400616E4E /* ssl_cookie.c */,
-				3D2F4C332085E89400616E4E /* Makefile */,
 				3D2F4C342085E89400616E4E /* ctr_drbg.c */,
 				3D2F4C352085E89400616E4E /* aesni.c */,
 				3D2F4C362085E89400616E4E /* dhm.c */,
@@ -812,9 +823,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0930;
-				ORGANIZATIONNAME = Jan;
+				ORGANIZATIONNAME = ControlThings;
 				TargetAttributes = {
 					3D2F4DC720889EBB00616E4E = {
+						CreatedOnToolsVersion = 9.3;
+					};
+					3D5FE20B2088C8E000A4C720 = {
 						CreatedOnToolsVersion = 9.3;
 					};
 					3DAC75422085DDC400A9CEC7 = {
@@ -837,6 +851,7 @@
 			targets = (
 				3DAC75422085DDC400A9CEC7 /* MistApi */,
 				3D2F4DC720889EBB00616E4E /* MistApiTest */,
+				3D5FE20B2088C8E000A4C720 /* UniversalMistApi */,
 			);
 		};
 /* End PBXProject section */
@@ -853,6 +868,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3D5FE20F2088C8F000A4C720 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Source: https://www.raywenderlich.com/41377/creating-a-static-library-in-ios-tutorial\n# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target MistApi ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target MistApi -configuration ${CONFIGURATION} -sdk iphonesimulator -arch x86_64 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n\n\nFINAL_DIR=${PROJECT_DIR}/build_universal\nmkdir -o ${FINAL_DIR}\ncp -R ${UNIVERSAL_OUTPUTFOLDER} ${FINAL_DIR}\necho \"warning: The output dir is: \" ${FINAL_DIR}";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3D2F4DC420889EBB00616E4E /* Sources */ = {
@@ -959,7 +990,6 @@
 				3D2F4D3720887C4300616E4E /* wish_debug.c in Sources */,
 				3D2F4CAE2085E89500616E4E /* entropy.c in Sources */,
 				3D2F4D8520887C6900616E4E /* key_exchange.c in Sources */,
-				3D2F4C7B2085E89500616E4E /* Makefile in Sources */,
 				3D2F4D3320887C4300616E4E /* wish_utils.c in Sources */,
 				3D2F4CA12085E89500616E4E /* ecp.c in Sources */,
 				3D2F4C782085E89500616E4E /* cipher_wrap.c in Sources */,
@@ -1064,6 +1094,24 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fi.controlthings.MistApiTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3D5FE20D2088C8E100A4C720 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 75MTAGEK2D;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3D5FE20E2088C8E100A4C720 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 75MTAGEK2D;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -1214,6 +1262,15 @@
 			buildConfigurations = (
 				3D2F4DDC20889EBE00616E4E /* Debug */,
 				3D2F4DDD20889EBE00616E4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D5FE20C2088C8E100A4C720 /* Build configuration list for PBXAggregateTarget "UniversalMistApi" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D5FE20D2088C8E100A4C720 /* Debug */,
+				3D5FE20E2088C8E100A4C720 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
