@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Wish : NSObject
--(void)launchWish:(NSString*) appName;
+@interface MistPort : NSObject
++(void)launchWish;
++(void)launchMistApi;
 @end

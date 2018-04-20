@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#include "WishPort.h"
+#include "MistPort.h"
 #include "MistApi.h"
 
 #include "fs_port.h"
@@ -21,10 +21,10 @@ static NSLock *appToCoreLock;
 static BOOL launchedOnce = NO;
 
 
-@implementation Wish
+@implementation MistPort
 
 
--(void)saveAppDocumentsPath {
++(void)saveAppDocumentsPath {
     NSString *path;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     path = [paths objectAtIndex:0];
@@ -32,17 +32,16 @@ static BOOL launchedOnce = NO;
 }
 
 // Wish core thread
--(void)wishTask:(NSString *)appName {
-    //(char*) [[UIDevice currentDevice] name].UTF8String
-    ios_port_set_name((char*) appName.UTF8String);
++(void)wishTask:(id) param {
     
+    ios_port_set_name((char*) [[UIDevice currentDevice] name].UTF8String);
     
     ios_port_main();
     
     /* unreachable */
 }
 
-- (void)launchWish:(NSString *)appName {
++(void)launchWish {
     
     if (!launchedOnce) {
         launchedOnce = YES;
@@ -52,15 +51,18 @@ static BOOL launchedOnce = NO;
                     format:@"Wish cannot be launched several times."];
     }
     
-    [self saveAppDocumentsPath];
+    [MistPort saveAppDocumentsPath];
     ios_port_setup_platform();
     
-    [MistApi startMistApi:@"MistApi"];
     appToCoreLock = [[NSLock alloc] init];
     wishThread = [[NSThread alloc] initWithTarget:self
                                          selector:@selector(wishTask:)
-                                              object:appName];
+                                              object:nil];
     [wishThread start];
+}
+
++(void)launchMistApi {
+    [MistApi startMistApi:@"MistApi"];
 }
 
 
@@ -70,6 +72,7 @@ static BOOL launchedOnce = NO;
 /**
  This function is used to signal that the Core is ready for an app to log in.
  It will call a function on the app's main thread to signal that app can log in.
+ 
  This function is run in the context of the wish thread.
  */
 void port_service_ipc_connected(bool connected) {
@@ -77,7 +80,9 @@ void port_service_ipc_connected(bool connected) {
 }
 
 /* Send data to app, invoking a method on the main thread to transport the the data.
- This function is run in the context of the wish thread. */
+ 
+ This function is run in the context of the wish thread.
+ */
 void port_send_to_app(const uint8_t wsid[32], const uint8_t *data, size_t len) {
     uint8_t *wsid_copy = malloc(32);
     uint8_t *data_copy = malloc(len);

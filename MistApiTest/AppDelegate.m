@@ -20,7 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     NSLog(@"didFinishLaunchingWithOptions");
-    Wish *wish = [[Wish alloc] init];
+    MistPort *wish = [[MistPort alloc] init];
     [wish launchWish:@"foo"];
     
     return YES;
