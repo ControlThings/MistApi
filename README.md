@@ -13,10 +13,12 @@
 * Symlink MistApi/universal_lib to a folder in your project, e.g. "lib". 
 ** The advantage with a symlink is that if you make changes in to MistApi lib, then you can take those changes into use simply by re-building your app.
 ** Alternatively a copy can also be made
-** ToDo: CocoaPods 
+
 * Add library to your project: Under your project target, under "Linked frameworks and libraries" add the file libMistApi.a from lib folder
 * Under target Build settings (all) > Search paths > header search paths add ${PROJECT_DIR}/lib/include as recursive
 * Under Build settings (all) > Search paths > library search paths, add ${PROJECT_DIR}/lib
+
+* ToDo: CocoaPods 
 
 ### Starting Wish and MistApi
 

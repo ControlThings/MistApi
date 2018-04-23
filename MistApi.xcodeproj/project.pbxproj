@@ -165,13 +165,6 @@
 		3D2F4DC120889E6400616E4E /* Signals.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DA92088810A00616E4E /* Signals.h */; };
 		3D2F4DC220889E6400616E4E /* WldList.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DAA2088810A00616E4E /* WldList.h */; };
 		3D2F4DC320889E6400616E4E /* IdentityFriendRequestList.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DAD2088810A00616E4E /* IdentityFriendRequestList.h */; };
-		3D2F4DCC20889EBC00616E4E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4DCB20889EBC00616E4E /* AppDelegate.m */; };
-		3D2F4DCF20889EBC00616E4E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4DCE20889EBC00616E4E /* ViewController.m */; };
-		3D2F4DD220889EBC00616E4E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D2F4DD020889EBC00616E4E /* Main.storyboard */; };
-		3D2F4DD420889EBE00616E4E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D2F4DD320889EBE00616E4E /* Assets.xcassets */; };
-		3D2F4DD720889EBE00616E4E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D2F4DD520889EBE00616E4E /* LaunchScreen.storyboard */; };
-		3D2F4DDA20889EBE00616E4E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F4DD920889EBE00616E4E /* main.m */; };
-		3D2F4DE02088A14D00616E4E /* libMistApi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAC75432085DDC400A9CEC7 /* libMistApi.a */; };
 		3D5FE2402088DE9500A4C720 /* WishRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DA02088810A00616E4E /* WishRequest.h */; };
 		3D5FE2412088DE9500A4C720 /* MistApiResponseHandler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DB02088810A00616E4E /* MistApiResponseHandler.h */; };
 		3D5FE2422088DE9500A4C720 /* MistRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DB12088810A00616E4E /* MistRequest.h */; };
@@ -423,29 +416,11 @@
 		3D2F4DB12088810A00616E4E /* MistRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MistRequest.h; sourceTree = "<group>"; };
 		3D2F4DBB2088821300616E4E /* MistPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MistPort.h; sourceTree = "<group>"; };
 		3D2F4DBC2088826900616E4E /* MistPort.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MistPort.m; sourceTree = "<group>"; };
-		3D2F4DC820889EBB00616E4E /* MistApiTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MistApiTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D2F4DCA20889EBC00616E4E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		3D2F4DCB20889EBC00616E4E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		3D2F4DCD20889EBC00616E4E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		3D2F4DCE20889EBC00616E4E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		3D2F4DD120889EBC00616E4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3D2F4DD320889EBE00616E4E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3D2F4DD620889EBE00616E4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		3D2F4DD820889EBE00616E4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3D2F4DD920889EBE00616E4E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3D5FE2152088D48A00A4C720 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3DAC75432085DDC400A9CEC7 /* libMistApi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMistApi.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3D2F4DC520889EBB00616E4E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D2F4DE02088A14D00616E4E /* libMistApi.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3DAC75402085DDC400A9CEC7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -745,22 +720,6 @@
 			path = request;
 			sourceTree = "<group>";
 		};
-		3D2F4DC920889EBC00616E4E /* MistApiTest */ = {
-			isa = PBXGroup;
-			children = (
-				3D2F4DCA20889EBC00616E4E /* AppDelegate.h */,
-				3D2F4DCB20889EBC00616E4E /* AppDelegate.m */,
-				3D2F4DCD20889EBC00616E4E /* ViewController.h */,
-				3D2F4DCE20889EBC00616E4E /* ViewController.m */,
-				3D2F4DD020889EBC00616E4E /* Main.storyboard */,
-				3D2F4DD320889EBE00616E4E /* Assets.xcassets */,
-				3D2F4DD520889EBE00616E4E /* LaunchScreen.storyboard */,
-				3D2F4DD820889EBE00616E4E /* Info.plist */,
-				3D2F4DD920889EBE00616E4E /* main.m */,
-			);
-			path = MistApiTest;
-			sourceTree = "<group>";
-		};
 		3D2F4DDE20889EEC00616E4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -783,7 +742,6 @@
 				3D2F4CE320887BCB00616E4E /* wish_app */,
 				3D2F4CBE20887BB000616E4E /* src */,
 				3D2F4C242085E89400616E4E /* library */,
-				3D2F4DC920889EBC00616E4E /* MistApiTest */,
 				3DAC75442085DDC400A9CEC7 /* Products */,
 				3D2F4DDE20889EEC00616E4E /* Frameworks */,
 			);
@@ -793,7 +751,6 @@
 			isa = PBXGroup;
 			children = (
 				3DAC75432085DDC400A9CEC7 /* libMistApi.a */,
-				3D2F4DC820889EBB00616E4E /* MistApiTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -801,23 +758,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3D2F4DC720889EBB00616E4E /* MistApiTest */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3D2F4DDB20889EBE00616E4E /* Build configuration list for PBXNativeTarget "MistApiTest" */;
-			buildPhases = (
-				3D2F4DC420889EBB00616E4E /* Sources */,
-				3D2F4DC520889EBB00616E4E /* Frameworks */,
-				3D2F4DC620889EBB00616E4E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = MistApiTest;
-			productName = MistApiTest;
-			productReference = 3D2F4DC820889EBB00616E4E /* MistApiTest.app */;
-			productType = "com.apple.product-type.application";
-		};
 		3DAC75422085DDC400A9CEC7 /* MistApi */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3DAC754C2085DDC500A9CEC7 /* Build configuration list for PBXNativeTarget "MistApi" */;
@@ -844,9 +784,6 @@
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = ControlThings;
 				TargetAttributes = {
-					3D2F4DC720889EBB00616E4E = {
-						CreatedOnToolsVersion = 9.3;
-					};
 					3D5FE2102088D32900A4C720 = {
 						CreatedOnToolsVersion = 9.3;
 					};
@@ -869,24 +806,10 @@
 			projectRoot = "";
 			targets = (
 				3DAC75422085DDC400A9CEC7 /* MistApi */,
-				3D2F4DC720889EBB00616E4E /* MistApiTest */,
 				3D5FE2102088D32900A4C720 /* UniversalBuild */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		3D2F4DC620889EBB00616E4E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D2F4DD720889EBE00616E4E /* LaunchScreen.storyboard in Resources */,
-				3D2F4DD420889EBE00616E4E /* Assets.xcassets in Resources */,
-				3D2F4DD220889EBC00616E4E /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		3D5FE2142088D32D00A4C720 /* ShellScript */ = {
@@ -905,16 +828,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3D2F4DC420889EBB00616E4E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3D2F4DCF20889EBC00616E4E /* ViewController.m in Sources */,
-				3D2F4DDA20889EBE00616E4E /* main.m in Sources */,
-				3D2F4DCC20889EBC00616E4E /* AppDelegate.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3DAC753F2085DDC400A9CEC7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1070,60 +983,7 @@
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXVariantGroup section */
-		3D2F4DD020889EBC00616E4E /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3D2F4DD120889EBC00616E4E /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		3D2F4DD520889EBE00616E4E /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3D2F4DD620889EBE00616E4E /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
-		3D2F4DDC20889EBE00616E4E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 75MTAGEK2D;
-				INFOPLIST_FILE = MistApiTest/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = fi.controlthings.MistApiTest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		3D2F4DDD20889EBE00616E4E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 75MTAGEK2D;
-				INFOPLIST_FILE = MistApiTest/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = fi.controlthings.MistApiTest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		3D5FE2122088D32900A4C720 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1284,15 +1144,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3D2F4DDB20889EBE00616E4E /* Build configuration list for PBXNativeTarget "MistApiTest" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3D2F4DDC20889EBE00616E4E /* Debug */,
-				3D2F4DDD20889EBE00616E4E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		3D5FE2112088D32900A4C720 /* Build configuration list for PBXAggregateTarget "UniversalBuild" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
