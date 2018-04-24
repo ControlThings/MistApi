@@ -11,6 +11,7 @@
 #include "mist_api.h"
 
 mist_api_t *get_mist_api(void);
+int get_next_rpc_id(void);
 
 @interface MistApi : NSObject
 +(void)startMistApi:(NSString *)appName;

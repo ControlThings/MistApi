@@ -23,7 +23,10 @@ mist_api_t *get_mist_api(void) {
     return mist_api;
 }
 
-static int next_rpc_id = 1;
+int get_next_rpc_id(void) {
+    static int next_rpc_id = 1;
+    return next_rpc_id++;
+}
 
 NSMutableDictionary *cbDictionary;
 
@@ -155,7 +158,9 @@ static void generic_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
         NSLog(@"no id in BSON request");
         return 0;
     }
-    bson_inplace_set_long(&it, ++next_rpc_id);
+    
+    int rpc_id = get_next_rpc_id();
+    bson_inplace_set_long(&it, rpc_id);
     
     char *op;
     if (BSON_STRING != bson_find(&it, reqBson, "op")) {
@@ -165,11 +170,11 @@ static void generic_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
     op = (char*) bson_iterator_string(&it);
     cb.opString = [[NSString alloc] initWithUTF8String:op];
     
-    cb.rpcId = next_rpc_id;
-    [cbDictionary setObject:cb forKey:[NSValue valueWithBytes:&next_rpc_id objCType:@encode(int)]];
+    cb.rpcId = rpc_id;
+    [cbDictionary setObject:cb forKey:[NSValue valueWithBytes:&rpc_id objCType:@encode(int)]];
     mist_api_request(mist_api, reqBson, generic_callback);
     
-    return next_rpc_id;
+    return rpc_id;
 }
 
 + (void)mistApiCancel:(int)rpcId {
@@ -182,13 +187,15 @@ static void generic_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
         NSLog(@"no id in BSON request");
         return 0;
     }
-    bson_inplace_set_long(&it, ++next_rpc_id);
     
-    cb.rpcId = next_rpc_id;
-    [cbDictionary setObject:cb forKey:[NSValue valueWithBytes:&next_rpc_id objCType:@encode(int)]];
+    int rpc_id = get_next_rpc_id();
+    bson_inplace_set_long(&it, rpc_id);
+    
+    cb.rpcId = rpc_id;
+    [cbDictionary setObject:cb forKey:[NSValue valueWithBytes:&rpc_id objCType:@encode(int)]];
     wish_api_request(mist_api, reqBson, generic_callback);
     
-    return next_rpc_id;
+    return rpc_id;
 }
 
 + (void)wishApiCancel:(int)rpcId {
