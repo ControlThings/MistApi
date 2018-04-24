@@ -22,6 +22,18 @@
 
 ### Starting Wish and MistApi
 
+Run
+
+    [MistPort launchWish];
+    [MistPort launchMistApi];
+
+to start Wish and MistApi. These should be run exactly once, and will raise an exception is run several times.
+
+### Sandbox support
+
+The initial Sandbox support implemented here is very rudimetary. You should be aware of its limitations.
+
+* Only one sandbox is supported
 
 ## Information on how the project was set up in Xcode
 
