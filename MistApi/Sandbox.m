@@ -28,6 +28,7 @@ char sandbox_id[SANDBOX_ID_LEN];
     self.callback = cb;
     
     idRewriteDict = [[NSMutableDictionary<NSNumber *, NSNumber *> alloc] init];
+    sandboxInstance = self;
     return self;
 }
 
@@ -70,10 +71,8 @@ static void sandbox_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
 }
 
 - (void)requestWithData:(NSData *)reqData {
-    sandboxInstance = self;
-    
     /* We must also have a RPC request id re-writing scheme in place, because we must ensure that all the requests sent to mist-api, both "normal" and "sandboxed" requests, have distinct ids.
-     
+     So that sandboxed RPCs don't clash with RPCs performed using mist-api directly
      */
     
     
