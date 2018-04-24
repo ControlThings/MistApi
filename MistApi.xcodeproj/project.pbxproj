@@ -169,6 +169,8 @@
 		3D5FE2412088DE9500A4C720 /* MistApiResponseHandler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DB02088810A00616E4E /* MistApiResponseHandler.h */; };
 		3D5FE2422088DE9500A4C720 /* MistRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DB12088810A00616E4E /* MistRequest.h */; };
 		3D5FE2442089D80600A4C720 /* MistPort.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DBB2088821300616E4E /* MistPort.h */; };
+		3DCE5FA4208E040C00372643 /* Sandbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DCE5FA3208E040C00372643 /* Sandbox.m */; };
+		3DCE5FA5208E2A1700372643 /* Sandbox.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DCE5FA2208E038700372643 /* Sandbox.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -188,6 +190,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				3DCE5FA5208E2A1700372643 /* Sandbox.h in CopyFiles */,
 				3D5FE2442089D80600A4C720 /* MistPort.h in CopyFiles */,
 				3D5FE2402088DE9500A4C720 /* WishRequest.h in CopyFiles */,
 				3D5FE2412088DE9500A4C720 /* MistApiResponseHandler.h in CopyFiles */,
@@ -418,6 +421,8 @@
 		3D2F4DBC2088826900616E4E /* MistPort.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MistPort.m; sourceTree = "<group>"; };
 		3D5FE2152088D48A00A4C720 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3DAC75432085DDC400A9CEC7 /* libMistApi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMistApi.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DCE5FA2208E038700372643 /* Sandbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sandbox.h; sourceTree = "<group>"; };
+		3DCE5FA3208E040C00372643 /* Sandbox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sandbox.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -699,6 +704,8 @@
 				3D2F4DAF2088810A00616E4E /* WishRequest.m */,
 				3D2F4DB02088810A00616E4E /* MistApiResponseHandler.h */,
 				3D2F4DB12088810A00616E4E /* MistRequest.h */,
+				3DCE5FA2208E038700372643 /* Sandbox.h */,
+				3DCE5FA3208E040C00372643 /* Sandbox.m */,
 			);
 			path = MistApi;
 			sourceTree = "<group>";
@@ -866,6 +873,7 @@
 				3D2F4D8720887C6900616E4E /* keypair.c in Sources */,
 				3D2F4CD820887BB000616E4E /* mist_api_sandbox.c in Sources */,
 				3D2F4CA32085E89500616E4E /* x509.c in Sources */,
+				3DCE5FA4208E040C00372643 /* Sandbox.m in Sources */,
 				3D2F4D8420887C6900616E4E /* sign.c in Sources */,
 				3D2F4C7E2085E89500616E4E /* dhm.c in Sources */,
 				3D2F4C9E2085E89500616E4E /* base64.c in Sources */,

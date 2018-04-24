@@ -19,6 +19,10 @@ static wish_app_t *wish_app;
 static mist_app_t *mist_app;
 static mist_api_t *mist_api;
 
+mist_api_t *get_mist_api(void) {
+    return mist_api;
+}
+
 static int next_rpc_id = 1;
 
 NSMutableDictionary *cbDictionary;

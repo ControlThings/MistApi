@@ -8,6 +8,9 @@
 
 #import "MistRequest.h"
 #include "bson.h"
+#include "mist_api.h"
+
+mist_api_t *get_mist_api(void);
 
 @interface MistApi : NSObject
 +(void)startMistApi:(NSString *)appName;
@@ -15,7 +18,6 @@
 +(void)mistApiCancel:(int) rpcId;
 +(int)wishApiRequestWithBson:(bson *)reqBson callback:(id <MistApiResponseHandler>)cb;
 +(void)wishApiCancel:(int) rpcId;
-
 +(void)connected:(id) param;
 +(void)sendToMistApp:(NSArray *) params;
 @end
