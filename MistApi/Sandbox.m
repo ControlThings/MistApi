@@ -75,14 +75,46 @@ static void sandbox_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
      So that sandboxed RPCs don't clash with RPCs performed using mist-api directly
      */
     
+    bson_iterator rit;
     
+    bson_iterator_from_buffer(&rit, reqData.bytes);
+    
+    if (BSON_STRING != bson_find_from_buffer(&rit, reqData.bytes, "op")) {
+        NSLog(@"Error: no op.");
+        return;
+    }
+    
+    const char *op = bson_iterator_string(&rit);
+    
+    size_t rewritten_op_max_len = strlen(op) + 100;
+    char new_op[rewritten_op_max_len];
+    snprintf(new_op, rewritten_op_max_len, "sandboxed.%s", op);
+    
+    bson rewritten_bs;
+    bson_init(&rewritten_bs);
+    bson_append_string(&rewritten_bs, "op", new_op);
+    
+    if (BSON_ARRAY != bson_find_from_buffer(&rit, reqData.bytes, "args")) {
+        NSLog(@"Error: no args.");
+        return;
+    }
+    bson_append_element(&rewritten_bs, "args", &rit);
+    
+    if (BSON_INT != bson_find_from_buffer(&rit, reqData.bytes, "id")) {
+        NSLog(@"Error: no id.");
+        return;
+    }
+    bson_append_element(&rewritten_bs, "id", &rit);
+    bson_finish(&rewritten_bs);
+    
+    bson_visit("Rewritten sandbox request", bson_data(&rewritten_bs));
     
     int rpc_id = 0;
     int sandbox_rpc_id = 0;
     
     bson_iterator it;
     
-    if (BSON_INT == bson_find_from_buffer(&it, reqData.bytes, "id")) {
+    if (BSON_INT == bson_find_from_buffer(&it, bson_data(&rewritten_bs), "id")) {
         /* A normal RPC request from Sandbox, assign new RPC id and save mapping */
         rpc_id = get_next_rpc_id();
         sandbox_rpc_id = bson_iterator_int(&it);
@@ -91,11 +123,11 @@ static void sandbox_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
         [idRewriteDict setObject:[NSNumber numberWithInt:sandbox_rpc_id] forKey:[NSNumber numberWithInt:rpc_id]];
         //NSLog(@"sandbox-rpc-id count %lu", [idRewriteDict count]);
         bson bs;
-        bson_init_with_data(&bs, reqData.bytes);
+        bson_init_with_data(&bs, bson_data(&rewritten_bs));
         
         sandboxed_api_request_context(get_mist_api(), sandbox_id, &bs, sandbox_callback, NULL);
     }
-    else if (BSON_INT == bson_find_from_buffer(&it, reqData.bytes, "end")) {
+    else if (BSON_INT == bson_find_from_buffer(&it, bson_data(&rewritten_bs), "end")) {
         /* Request to end a RPC request ('sig') */
         sandbox_rpc_id = bson_iterator_int(&it);
         bool found = false;
@@ -123,6 +155,7 @@ static void sandbox_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
         NSLog(@"No RPC id in request from sandbox.");
         return;
     }
+    bson_destroy(&rewritten_bs);
     
 }
 
