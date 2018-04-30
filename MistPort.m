@@ -7,10 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+@import SystemConfiguration.CaptiveNetwork;
+@import NetworkExtension;
+
+
 #include "MistPort.h"
 #include "MistApi.h"
 
 #include "fs_port.h"
+#include "mist_port.h"
 
 int ios_port_main(void);
 void ios_port_set_name(char *name);
@@ -19,6 +24,7 @@ void ios_port_setup_platform(void);
 static NSThread *wishThread;
 static NSLock *appToCoreLock;
 static BOOL launchedOnce = NO;
+static BOOL mistLaunchedOnce = NO;
 
 
 @implementation MistPort
@@ -47,8 +53,11 @@ static BOOL launchedOnce = NO;
         launchedOnce = YES;
     }
     else {
+        return;
+        /*
         [NSException raise:NSInternalInconsistencyException
                     format:@"Wish cannot be launched several times."];
+         */
     }
     
     [MistPort saveAppDocumentsPath];
@@ -57,11 +66,19 @@ static BOOL launchedOnce = NO;
     appToCoreLock = [[NSLock alloc] init];
     wishThread = [[NSThread alloc] initWithTarget:self
                                          selector:@selector(wishTask:)
-                                              object:nil];
+                                           object:nil];
+    [wishThread setName:@"Wish core"];
     [wishThread start];
 }
 
 +(void)launchMistApi {
+    if (!mistLaunchedOnce) {
+        mistLaunchedOnce = YES;
+    }
+    else {
+        return;
+    }
+    
     [MistApi startMistApi:@"MistApi"];
 }
 
@@ -95,7 +112,7 @@ void port_send_to_app(const uint8_t wsid[32], const uint8_t *data, size_t len) {
     NSValue *lenValue = [NSValue valueWithBytes:&len objCType:@encode(size_t)];
     NSArray *params = @[wsidValue, dataValue, lenValue];
     
-    [MistApi performSelectorOnMainThread:@selector(sendToMistApp:) withObject:params waitUntilDone:false];
+    [MistApi performSelectorOnMainThread:@selector(sendToMistApp:) withObject:params waitUntilDone:true];
 }
 
 void port_service_lock_acquire(void) {
@@ -105,4 +122,43 @@ void port_service_lock_acquire(void) {
 void port_service_lock_release(void) {
     [appToCoreLock unlock];
 }
+
+static void show_curr_wifi(void) {
+    NSLog(@"in show_curr_wifi");
+    NSArray *interFaceNames = (__bridge_transfer id)CNCopySupportedInterfaces();
+    
+    for (NSString *name in interFaceNames) {
+        NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)name);
+        
+        NSLog(@"wifi info: bssid: %@, ssid:%@, ssidData: %@", info[@"BSSID"], info[@"SSID"], info[@"SSIDDATA"]);
+        
+    }
+    
+}
+void mist_port_wifi_join(mist_api_t* mist_api, const char* ssid, const char* password) {
+    show_curr_wifi();
+    NSLog(@"Now joining to wifi: %s, password %s", ssid, password);
+    
+    NEHotspotConfiguration *configuration = [[NEHotspotConfiguration
+                                              alloc] initWithSSID:@"mist-ESCWifi00191f"];
+    configuration.joinOnce = YES;
+    
+    [[NEHotspotConfigurationManager sharedManager] applyConfiguration:configuration completionHandler:^(NSError * _Nullable error) {
+        if (error) {
+            if (error.code != NEHotspotConfigurationErrorAlreadyAssociated) {
+                NSLog(@"mist_port_wifi_join NSError code: %u", error.code);
+                mist_port_wifi_join_cb(get_mist_api(), WIFI_JOIN_FAILED);
+                return;
+            }
+            else {
+                NSLog(@"mist_port_wifi_join: Already associated with requested network.");
+            }
+        }
+        show_curr_wifi();
+        mist_port_wifi_join_cb(get_mist_api(), WIFI_JOIN_OK);
+        
+        
+    }];
+}
+
 

@@ -171,6 +171,7 @@
 		3D5FE2442089D80600A4C720 /* MistPort.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DBB2088821300616E4E /* MistPort.h */; };
 		3DCE5FA4208E040C00372643 /* Sandbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DCE5FA3208E040C00372643 /* Sandbox.m */; };
 		3DCE5FA5208E2A1700372643 /* Sandbox.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DCE5FA2208E038700372643 /* Sandbox.h */; };
+		3DF201872093559D00B33336 /* mist_api_commission.c in Sources */ = {isa = PBXBuildFile; fileRef = 3DF201862093559C00B33336 /* mist_api_commission.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -423,6 +424,9 @@
 		3DAC75432085DDC400A9CEC7 /* libMistApi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMistApi.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DCE5FA2208E038700372643 /* Sandbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sandbox.h; sourceTree = "<group>"; };
 		3DCE5FA3208E040C00372643 /* Sandbox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sandbox.m; sourceTree = "<group>"; };
+		3DF201852093559C00B33336 /* mist_api_commission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mist_api_commission.h; sourceTree = "<group>"; };
+		3DF201862093559C00B33336 /* mist_api_commission.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mist_api_commission.c; sourceTree = "<group>"; };
+		3DF20188209355ED00B33336 /* mist_port.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mist_port.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -518,6 +522,9 @@
 		3D2F4CBE20887BB000616E4E /* src */ = {
 			isa = PBXGroup;
 			children = (
+				3DF20188209355ED00B33336 /* mist_port.h */,
+				3DF201862093559C00B33336 /* mist_api_commission.c */,
+				3DF201852093559C00B33336 /* mist_api_commission.h */,
 				3D2F4CBF20887BB000616E4E /* mist_app_control.h */,
 				3D2F4CC020887BB000616E4E /* mist_api.h */,
 				3D2F4CC120887BB000616E4E /* version.h */,
@@ -867,6 +874,7 @@
 				3D2F4DB42088810A00616E4E /* WldList.m in Sources */,
 				3D2F4CEB20887BCB00616E4E /* wish_app.c in Sources */,
 				3D2F4CEA20887BCB00616E4E /* wish_protocol.c in Sources */,
+				3DF201872093559D00B33336 /* mist_api_commission.c in Sources */,
 				3D2F4D9820887D5B00616E4E /* network.c in Sources */,
 				3D2F4D7E20887C6900616E4E /* sha512_ed25519.c in Sources */,
 				3D2F4CAC2085E89500616E4E /* padlock.c in Sources */,
