@@ -448,7 +448,7 @@ int ios_port_main(void) {
     
     wish_core_update_identities(core);
     
-    create_test_identities();
+    //create_test_identities();
     
     if (as_server) {
         setup_wish_server(core);
