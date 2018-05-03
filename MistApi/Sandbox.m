@@ -34,15 +34,32 @@ static NSMutableDictionary<NSNumber *, NSNumber *> *idRewriteDict;
 }
 
 static void sandbox_callback(rpc_client_req* req, void *ctx, const uint8_t *payload, size_t payload_len) {
+    //bson_visit("sandbox_callback", payload);
     bson_iterator it;
+    BOOL mappingFound = NO;
     if (BSON_INT == bson_find_from_buffer(&it, (const char *) payload, "ack")) {
         /* A reply to a normal request, rewrite the id and remove mapping */
         int rpc_id = bson_iterator_int(&it);
         NSNumber *key = [NSNumber numberWithInt:rpc_id];
-        int sandbox_rpc_id = [idRewriteDict[key] intValue];
-        bson_inplace_set_long(&it, sandbox_rpc_id);
-        [idRewriteDict removeObjectForKey:key];
-        NSLog(@"Ack for sandbox-rpc-id %i, which was rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
+        if (idRewriteDict[key] != nil) {
+            int sandbox_rpc_id = [idRewriteDict[key] intValue];
+            bson_inplace_set_long(&it, sandbox_rpc_id);
+            [idRewriteDict removeObjectForKey:key];
+            mappingFound = YES;
+            //NSLog(@"Ack for sandbox-rpc-id %i, which was rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
+        }
+    }
+    else if (BSON_INT == bson_find_from_buffer(&it, (const char *) payload, "err")) {
+        /* An error reply to a normal request, rewrite the id and remove mapping */
+        int rpc_id = bson_iterator_int(&it);
+        NSNumber *key = [NSNumber numberWithInt:rpc_id];
+        if (idRewriteDict[key] != nil) {
+            int sandbox_rpc_id = [idRewriteDict[key] intValue];
+            bson_inplace_set_long(&it, sandbox_rpc_id);
+            [idRewriteDict removeObjectForKey:key];
+            mappingFound = YES;
+            //NSLog(@"Err for sandbox-rpc-id %i, which was rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
+        }
     }
     else if (BSON_INT == bson_find_from_buffer(&it, (const char *) payload, "sig")) {
         int rpc_id = bson_iterator_int(&it);
@@ -52,28 +69,38 @@ static void sandbox_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
         if (value != nil) {
             int sandbox_rpc_id = [value intValue];
             bson_inplace_set_long(&it, sandbox_rpc_id);
-            NSLog(@"Sig for sandbox-rpc-id %i, which was rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
+            mappingFound = YES;
+            //NSLog(@"Sig for sandbox-rpc-id %i, which was rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
         }
         else {
-            NSLog(@"Sig for rewritten rpc-id %i not found", rpc_id);
+            mappingFound = NO;
+            //NSLog(@"Sig for rewritten rpc-id %i not found", rpc_id);
         }
     }
     else if (BSON_INT == bson_find_from_buffer(&it, (const char *) payload, "fin")) {
         /* Remove mapping */
         int rpc_id = bson_iterator_int(&it);
         NSNumber *key = [NSNumber numberWithInt:rpc_id];
-        int sandbox_rpc_id = [idRewriteDict[key] intValue];
-        [idRewriteDict removeObjectForKey:key];
-        
-        NSLog(@"Fin for sandbox-rpc-id %i, which was rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
+        if (idRewriteDict[key] != nil) {
+            int sandbox_rpc_id = [idRewriteDict[key] intValue];
+            [idRewriteDict removeObjectForKey:key];
+            mappingFound = YES;
+            //NSLog(@"Fin for sandbox-rpc-id %i, which was rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
+        }
     }
     
-    sandboxInstance.callback([[NSData alloc] initWithBytes:payload length:payload_len]);
+    if (mappingFound) {
+        sandboxInstance.callback([[NSData alloc] initWithBytes:payload length:payload_len]);
+    }
+    else {
+        NSLog(@"Unexpected data to sandbox");
+        bson_visit("Unexpected data", payload);
+    }
 }
 
 static void sandbox_login_cb(rpc_client_req* req, void *ctx, const uint8_t *payload, size_t payload_len) {
-    NSLog(@"Sandbox cb");
-    bson_visit("Sandbox login cb", payload);
+    NSLog(@"in sandbox cb");
+    //bson_visit("Sandbox login cb", payload);
 }
 
 /**
@@ -89,7 +116,7 @@ static void sandbox_login_cb(rpc_client_req* req, void *ctx, const uint8_t *payl
     bson_append_int(&bs, "id", get_next_rpc_id());
     bson_finish(&bs);
     
-    sandboxed_api_request_context(get_mist_api(), self.sandboxId.bytes, &bs, sandbox_callback, NULL);
+    sandboxed_api_request_context(get_mist_api(), self.sandboxId.bytes, &bs, sandbox_login_cb, NULL);
     bson_destroy(&bs);
 }
 
@@ -102,35 +129,62 @@ static void sandbox_login_cb(rpc_client_req* req, void *ctx, const uint8_t *payl
     
     bson_iterator_from_buffer(&rit, reqData.bytes);
     
+    BOOL normalRequest = false;
+    BOOL cancelRequest = false;
+    
     if (BSON_STRING != bson_find_from_buffer(&rit, reqData.bytes, "op")) {
-        NSLog(@"Error: no op.");
-        return;
+        if (BSON_INT != bson_find_from_buffer(&rit, reqData.bytes, "end")) {
+            NSLog(@"Sandbox.requestWithData: Error: no op or end.");
+            return;
+        }
+        else {
+            cancelRequest = true;
+        }
     }
-    
-    const char *op = bson_iterator_string(&rit);
-    
-    size_t rewritten_op_max_len = strlen(op) + 100;
-    char new_op[rewritten_op_max_len];
-    snprintf(new_op, rewritten_op_max_len, "sandboxed.%s", op);
+    else {
+        normalRequest = true;
+    }
     
     bson rewritten_bs;
     bson_init(&rewritten_bs);
-    bson_append_string(&rewritten_bs, "op", new_op);
     
-    if (BSON_ARRAY != bson_find_from_buffer(&rit, reqData.bytes, "args")) {
-        NSLog(@"Error: no args.");
+    if (normalRequest) {
+        const char *op = bson_iterator_string(&rit);
+        
+        size_t rewritten_op_max_len = strlen(op) + 100;
+        char new_op[rewritten_op_max_len];
+        snprintf(new_op, rewritten_op_max_len, "sandboxed.%s", op);
+        
+        bson_append_string(&rewritten_bs, "op", new_op);
+        
+        if (BSON_ARRAY != bson_find_from_buffer(&rit, reqData.bytes, "args")) {
+            NSLog(@"Error: no args.");
+            return;
+        }
+        bson_append_element(&rewritten_bs, "args", &rit);
+        
+        if (BSON_INT != bson_find_from_buffer(&rit, reqData.bytes, "id")) {
+            
+            NSLog(@"Error: no id.");
+            return;
+        }
+        bson_append_element(&rewritten_bs, "id", &rit);
+        bson_finish(&rewritten_bs);
+    }
+    else if (cancelRequest) {
+        if (BSON_INT != bson_find_from_buffer(&rit, reqData.bytes, "end")) {
+            
+            NSLog(@"Error: no end.");
+            return;
+        }
+        bson_append_element(&rewritten_bs, "end", &rit);
+        bson_finish(&rewritten_bs);
+    }
+    else {
+        NSLog(@"Error: inconsistency.");
         return;
     }
-    bson_append_element(&rewritten_bs, "args", &rit);
-    
-    if (BSON_INT != bson_find_from_buffer(&rit, reqData.bytes, "id")) {
-        NSLog(@"Error: no id.");
-        return;
-    }
-    bson_append_element(&rewritten_bs, "id", &rit);
-    bson_finish(&rewritten_bs);
-    
-    bson_visit("Rewritten sandbox request", bson_data(&rewritten_bs));
+    //bson_visit("Rewritten sandbox request. (id not rewritten yet)", bson_data(&rewritten_bs));
     
     int rpc_id = 0;
     int sandbox_rpc_id = 0;
@@ -142,7 +196,7 @@ static void sandbox_login_cb(rpc_client_req* req, void *ctx, const uint8_t *payl
         rpc_id = get_next_rpc_id();
         sandbox_rpc_id = bson_iterator_int(&it);
         bson_inplace_set_long(&it, rpc_id);
-        NSLog(@"Saving sandbox-rpc-id %i, which is rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
+        //NSLog(@"Saving sandbox-rpc-id %i, which is rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
         [idRewriteDict setObject:[NSNumber numberWithInt:sandbox_rpc_id] forKey:[NSNumber numberWithInt:rpc_id]];
         //NSLog(@"sandbox-rpc-id count %lu", [idRewriteDict count]);
         bson bs;
@@ -154,9 +208,9 @@ static void sandbox_login_cb(rpc_client_req* req, void *ctx, const uint8_t *payl
         /* Request to end a RPC request ('sig') */
         sandbox_rpc_id = bson_iterator_int(&it);
         bool found = false;
-        NSLog(@"sandbox-rpc-id count %lu", [idRewriteDict count]);
+        //NSLog(@"sandbox-rpc-id count %lu", [idRewriteDict count]);
         for (NSNumber *key in idRewriteDict) {
-            NSLog(@"sandbox-rp-id %i", [key intValue]);
+            //NSLog(@"sandbox-rp-id %i", [key intValue]);
             if ([idRewriteDict[key] intValue] == sandbox_rpc_id) {
                 rpc_id = [key intValue];
                 found = true;
@@ -166,8 +220,8 @@ static void sandbox_login_cb(rpc_client_req* req, void *ctx, const uint8_t *payl
         
         /* Call sandbox_api_cancel here */
         if (found == true) {
-            NSLog(@"Cancelling sandbox-rpc-id %i, which is rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
-            //sandboxed_api_request_cancel(get_mist_api(), sandbox_id, rpc_id);
+            //NSLog(@"Cancelling sandbox-rpc-id %i, which is rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
+            //sandboxed_api_request_cancel(get_mist_api(), self.sandboxId.bytes, rpc_id);
         }
         else {
             NSLog(@"Cancelling sandbox-rpc-id %i, but rpc-id not found!", sandbox_rpc_id);
