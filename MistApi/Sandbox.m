@@ -20,16 +20,16 @@ static Sandbox *sandboxInstance;
  */
 static NSMutableDictionary<NSNumber *, NSNumber *> *idRewriteDict;
 
-char sandbox_id[SANDBOX_ID_LEN];
-
 @implementation Sandbox
-- (id)initWithCallback:(SandboxCb)cb {
+- (id)initWithSandboxId:(NSData *)sandboxId callback:(SandboxCb) cb; {
     self = [super init];
     self.callback = cb;
     
+    self.sandboxId = sandboxId;
+    
     idRewriteDict = [[NSMutableDictionary<NSNumber *, NSNumber *> alloc] init];
     sandboxInstance = self;
-    	    
+    
     return self;
 }
 
@@ -72,6 +72,7 @@ static void sandbox_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
 }
 
 static void sandbox_login_cb(rpc_client_req* req, void *ctx, const uint8_t *payload, size_t payload_len) {
+    NSLog(@"Sandbox cb");
     bson_visit("Sandbox login cb", payload);
 }
 
@@ -82,13 +83,13 @@ static void sandbox_login_cb(rpc_client_req* req, void *ctx, const uint8_t *payl
 - (void)login {
     bson bs;
     bson_init(&bs);
-    bson_append_string(&bs, "op", "login");
+    bson_append_string(&bs, "op", "sandboxed.login");
     bson_append_start_array(&bs, "args");
     bson_append_finish_array(&bs);
     bson_append_int(&bs, "id", get_next_rpc_id());
     bson_finish(&bs);
     
-    sandboxed_api_request_context(get_mist_api(), sandbox_id, &bs, sandbox_callback, NULL);
+    sandboxed_api_request_context(get_mist_api(), self.sandboxId.bytes, &bs, sandbox_callback, NULL);
     bson_destroy(&bs);
 }
 
@@ -147,7 +148,7 @@ static void sandbox_login_cb(rpc_client_req* req, void *ctx, const uint8_t *payl
         bson bs;
         bson_init_with_data(&bs, bson_data(&rewritten_bs));
         
-        sandboxed_api_request_context(get_mist_api(), sandbox_id, &bs, sandbox_callback, NULL);
+        sandboxed_api_request_context(get_mist_api(), self.sandboxId.bytes, &bs, sandbox_callback, NULL);
     }
     else if (BSON_INT == bson_find_from_buffer(&it, bson_data(&rewritten_bs), "end")) {
         /* Request to end a RPC request ('sig') */
