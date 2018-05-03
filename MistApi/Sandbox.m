@@ -29,6 +29,7 @@ char sandbox_id[SANDBOX_ID_LEN];
     
     idRewriteDict = [[NSMutableDictionary<NSNumber *, NSNumber *> alloc] init];
     sandboxInstance = self;
+    	    
     return self;
 }
 
@@ -68,6 +69,27 @@ static void sandbox_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
     }
     
     sandboxInstance.callback([[NSData alloc] initWithBytes:payload length:payload_len]);
+}
+
+static void sandbox_login_cb(rpc_client_req* req, void *ctx, const uint8_t *payload, size_t payload_len) {
+    bson_visit("Sandbox login cb", payload);
+}
+
+/**
+ Convenience function for login to sandbox.
+ This is provided as an alternative for perfoming a "login" RPC from inside the sandbox.
+ */
+- (void)login {
+    bson bs;
+    bson_init(&bs);
+    bson_append_string(&bs, "op", "login");
+    bson_append_start_array(&bs, "args");
+    bson_append_finish_array(&bs);
+    bson_append_int(&bs, "id", get_next_rpc_id());
+    bson_finish(&bs);
+    
+    sandboxed_api_request_context(get_mist_api(), sandbox_id, &bs, sandbox_callback, NULL);
+    bson_destroy(&bs);
 }
 
 - (void)requestWithData:(NSData *)reqData {

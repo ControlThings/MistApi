@@ -13,4 +13,5 @@ typedef void (^SandboxCb)(NSData *responseData);
 @property SandboxCb callback;
 - (id) initWithCallback:(SandboxCb) cb;
 - (void) requestWithData:(NSData *)reqData;
+- (void) login;
 @end
