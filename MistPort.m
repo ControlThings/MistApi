@@ -133,32 +133,62 @@ static void show_curr_wifi(void) {
         NSLog(@"wifi info: bssid: %@, ssid:%@, ssidData: %@", info[@"BSSID"], info[@"SSID"], info[@"SSIDDATA"]);
         
     }
-    
 }
+
+#define SSID_LEN (32 + 1) //SSID can be max 32 charaters, plus null term.
+
+static void get_curr_wifi(char *ssid) {
+    NSLog(@"in get_curr_wifi");
+    NSArray *interFaceNames = (__bridge_transfer id)CNCopySupportedInterfaces();
+    
+    for (NSString *name in interFaceNames) {
+        NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)name);
+        
+        NSLog(@"wifi info: bssid: %@, ssid:%@, ssidData: %@", info[@"BSSID"], info[@"SSID"], info[@"SSIDDATA"]);
+        strncpy(ssid, [info[@"SSID"] UTF8String], SSID_LEN);
+        break;
+    }
+}
+
 void mist_port_wifi_join(mist_api_t* mist_api, const char* ssid, const char* password) {
     show_curr_wifi();
+    NEHotspotConfigurationManager *hotspotManager = [NEHotspotConfigurationManager sharedManager];
     NSLog(@"Now joining to wifi: %s, password %s", ssid, password);
-    
-    NEHotspotConfiguration *configuration = [[NEHotspotConfiguration
-                                              alloc] initWithSSID:@"mist-ESCWifi00191f"];
-    configuration.joinOnce = YES;
-    
-    [[NEHotspotConfigurationManager sharedManager] applyConfiguration:configuration completionHandler:^(NSError * _Nullable error) {
-        if (error) {
-            if (error.code != NEHotspotConfigurationErrorAlreadyAssociated) {
-                NSLog(@"mist_port_wifi_join NSError code: %u", error.code);
-                mist_port_wifi_join_cb(get_mist_api(), WIFI_JOIN_FAILED);
-                return;
-            }
-            else {
-                NSLog(@"mist_port_wifi_join: Already associated with requested network.");
-            }
+    if (ssid != NULL) {
+        NSString *ssidString = [NSString stringWithUTF8String:ssid];
+        NEHotspotConfiguration *configuration;
+        if (password == NULL) {
+            configuration = [[NEHotspotConfiguration alloc] initWithSSID:ssidString];
         }
-        show_curr_wifi();
-        mist_port_wifi_join_cb(get_mist_api(), WIFI_JOIN_OK);
+        else {
+            NSString *passphraseString = [NSString stringWithUTF8String:password];
+            configuration = [[NEHotspotConfiguration alloc] initWithSSID:ssidString passphrase: passphraseString isWEP:NO];
+        }
+        configuration.joinOnce = YES;
         
-        
-    }];
+        [hotspotManager applyConfiguration:configuration
+                                                        completionHandler:^(NSError * _Nullable error) {
+            if (error) {
+                if (error.code != NEHotspotConfigurationErrorAlreadyAssociated) {
+                    NSLog(@"mist_port_wifi_join NSError code: %u", error.code);
+                    mist_port_wifi_join_cb(get_mist_api(), WIFI_JOIN_FAILED);
+                    return;
+                }
+                else {
+                    NSLog(@"mist_port_wifi_join: Already associated with requested network.");
+                }
+            }
+            show_curr_wifi();
+            mist_port_wifi_join_cb(get_mist_api(), WIFI_JOIN_OK);
+        }];
+    }
+    else {
+        // ssid is null, in this case just try to remove the current network from list of known networks
+        char curr_ssid[SSID_LEN];
+        get_curr_wifi(curr_ssid);
+        NSString *currSSIDString = [NSString stringWithUTF8String:curr_ssid];
+        [hotspotManager removeConfigurationForSSID:currSSIDString];
+    }
 }
 
 
