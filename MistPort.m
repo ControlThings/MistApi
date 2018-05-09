@@ -188,6 +188,7 @@ void mist_port_wifi_join(mist_api_t* mist_api, const char* ssid, const char* pas
         get_curr_wifi(curr_ssid);
         NSString *currSSIDString = [NSString stringWithUTF8String:curr_ssid];
         [hotspotManager removeConfigurationForSSID:currSSIDString];
+        mist_port_wifi_join_cb(get_mist_api(), WIFI_JOIN_OK); //TODO
     }
 }
 
