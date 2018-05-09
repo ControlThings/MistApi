@@ -143,21 +143,23 @@ static void get_curr_wifi(char *ssid) {
     
     for (NSString *name in interFaceNames) {
         NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)name);
-        
-        NSLog(@"wifi info: bssid: %@, ssid:%@, ssidData: %@", info[@"BSSID"], info[@"SSID"], info[@"SSIDDATA"]);
-        strncpy(ssid, [info[@"SSID"] UTF8String], SSID_LEN);
-        break;
+        if (info != nil) {
+            NSLog(@"wifi info: bssid: %@, ssid:%@, ssidData: %@", info[@"BSSID"], info[@"SSID"], info[@"SSIDDATA"]);
+            strncpy(ssid, [info[@"SSID"] UTF8String], SSID_LEN);
+            break;
+        }
     }
 }
 
 void mist_port_wifi_join(mist_api_t* mist_api, const char* ssid, const char* password) {
     show_curr_wifi();
-    NEHotspotConfigurationManager *hotspotManager = [NEHotspotConfigurationManager sharedManager];
+    //NEHotspotConfigurationManager *hotspotManager = [NEHotspotConfigurationManager sharedManager];
     NSLog(@"Now joining to wifi: %s, password %s", ssid, password);
     if (ssid != NULL) {
         NSString *ssidString = [NSString stringWithUTF8String:ssid];
         NEHotspotConfiguration *configuration;
         if (password == NULL) {
+            NSLog(@"No password defined.");
             configuration = [[NEHotspotConfiguration alloc] initWithSSID:ssidString];
         }
         else {
@@ -166,8 +168,7 @@ void mist_port_wifi_join(mist_api_t* mist_api, const char* ssid, const char* pas
         }
         configuration.joinOnce = YES;
         
-        [hotspotManager applyConfiguration:configuration
-                                                        completionHandler:^(NSError * _Nullable error) {
+        [[NEHotspotConfigurationManager sharedManager] applyConfiguration:configuration completionHandler:^(NSError * _Nullable error) {
             if (error) {
                 if (error.code != NEHotspotConfigurationErrorAlreadyAssociated) {
                     NSLog(@"mist_port_wifi_join NSError code: %u", error.code);
@@ -187,7 +188,7 @@ void mist_port_wifi_join(mist_api_t* mist_api, const char* ssid, const char* pas
         char curr_ssid[SSID_LEN];
         get_curr_wifi(curr_ssid);
         NSString *currSSIDString = [NSString stringWithUTF8String:curr_ssid];
-        [hotspotManager removeConfigurationForSSID:currSSIDString];
+        [[NEHotspotConfigurationManager sharedManager] removeConfigurationForSSID:currSSIDString];
         mist_port_wifi_join_cb(get_mist_api(), WIFI_JOIN_OK); //TODO
     }
 }
