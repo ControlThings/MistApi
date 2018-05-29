@@ -313,7 +313,9 @@ int wish_send_advertizement(wish_core_t* core, uint8_t *ad_msg, size_t ad_len) {
         if (errno == ENETUNREACH || errno == ENETDOWN) {
             printf("wld: Network currently unreachable, or down. Retrying later.\n");
         } else if (errno == EPERM) {
-            printf("wld: Network returned EPERM.\n");
+            printf("wld: sendto EPERM.\n");
+        } else if (errno == EADDRNOTAVAIL) {
+            printf("wld: sendto EADDRNOTAVAIL\n");
         } else {
             error("sendto()");
         }
