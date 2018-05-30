@@ -150,6 +150,11 @@ static void generic_callback(rpc_client_req* req, void *ctx, const uint8_t *payl
     mist_api = mist_api_init(mist_app);
     
     cbDictionary = [[NSMutableDictionary alloc] init];
+    
+    /* Wish app periodic timer */
+    [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        wish_app_periodic(wish_app);
+    }];
 }
 
 + (int)mistApiRequestWithBson:(bson *)reqBson callback:(id <MistApiResponseHandler>)cb {
