@@ -1155,6 +1155,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = (
+					"wish-c99/deps/mbedtls-2.1.2/include/**",
+					"wish-c99/src",
+					"wish-c99/deps/**",
+				);
 			};
 			name = Release;
 		};
