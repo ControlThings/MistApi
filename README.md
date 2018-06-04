@@ -7,6 +7,7 @@
 
 ## How to use in your app
 
+* The minimum iOS version must be 11.0. This is because of the wifi functions.
 
 ### Including lib and headers into the project
 
