@@ -123,6 +123,10 @@ void port_service_lock_release(void) {
     [appToCoreLock unlock];
 }
 
+#if TARGET_OS_IPHONE && !TARGET_OS_SIMULATOR
+
+/* Building for real device, provide implementations for the Wifi functions */
+
 static void show_curr_wifi(void) {
     NSLog(@"in show_curr_wifi");
     NSArray *interFaceNames = (__bridge_transfer id)CNCopySupportedInterfaces();
@@ -193,4 +197,15 @@ void mist_port_wifi_join(mist_api_t* mist_api, const char* ssid, const char* pas
     }
 }
 
+#else //TARGET_OS_IPHONE && !TARGET_OS_SIMULATOR
+
+/* Building for iPhone Simulator, provide dummy implementations for the Wifi functions */
+
+void mist_port_wifi_join(mist_api_t* mist_api, const char* ssid, const char* password) {
+    NSLog(@"Warning, wifi functionality is not available in the iPhone simulator!");
+    NSLog(@"Pretending to hava joined wifi network SSID %s, password %s", ssid, password);
+    mist_port_wifi_join_cb(get_mist_api(), WIFI_JOIN_OK);
+}
+
+#endif //TARGET_OS_IPHONE && !TARGET_OS_SIMULATOR
 
