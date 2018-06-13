@@ -53,8 +53,9 @@ extern wish_connection_t wish_context_pool[];  /* Defined in wish_io.c */
 void error(const char *msg)
 {
     perror(msg);
+#if DEBUG == 1
     abort();
-    
+#endif
 }
 
 int write_to_socket(wish_connection_t* connection, unsigned char* buffer, int len) {
