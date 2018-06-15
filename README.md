@@ -4,8 +4,16 @@
 
 * Select target "UniversalBuild", and perform "Build". The final output, static lib file (.a) and include files, will appear into MistApi/universal_lib
 * Note that the library is build "universally", so you can run both on simulator and iphone platforms.
+* The custom script responsible for producing this "universal build" can be seen at: 
 
-## How to use in your app
+## How to use MistApi with 'react-native-mist-library'
+
+react-native-mist-library depends on this MistApi library, unfortunately for the time beign MistApi project is not set up as subrepo into rn mist-library. Instead you must update the library manually:
+
+* Copy the libMistApi.a and include dir from universal_build to RN MistLibrary project's ios/lib directory.
+* If you hve RN MistLibrary linked to the actual RN app project, you should make sure that RN MistLibrary is rebuilt after libMistApi.a is updated. This can be done by choosing the RN MistLibrary target/scheme and Product->clean.
+
+## How to use in your app (Generic instructions)
 
 * The minimum iOS version must be 11.0. This is because of the wifi functions.
 
