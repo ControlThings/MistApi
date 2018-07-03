@@ -2,9 +2,9 @@
 
 ## static library build process
 
-* Select target "UniversalBuild", and perform "Build". The final output, static lib file (.a) and include files, will appear into MistApi/universal_lib
+* Select scheme "UniversalBuild", and perform "Product -> Build". The final output, static lib file (.a) and include files, will appear into MistApi/universal_lib
 * Note that the library is build "universally", so you can run both on simulator and iphone platforms.
-* The custom script responsible for producing this "universal build" can be seen at: 
+* The custom script responsible for producing this "universal build" can be seen under MistApi project settings, target "UniversalBuild" -> Build Phases -> Run script
 
 ## How to use MistApi with 'react-native-mist-library'
 
