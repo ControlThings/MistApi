@@ -165,6 +165,8 @@
 		3D2F4DC120889E6400616E4E /* Signals.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DA92088810A00616E4E /* Signals.h */; };
 		3D2F4DC220889E6400616E4E /* WldList.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DAA2088810A00616E4E /* WldList.h */; };
 		3D2F4DC320889E6400616E4E /* IdentityFriendRequestList.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DAD2088810A00616E4E /* IdentityFriendRequestList.h */; };
+		3D48109C20EA3DBF0048B3CF /* PassthroughRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D48109B20EA3DBF0048B3CF /* PassthroughRequest.m */; };
+		3D48109D20EA54AB0048B3CF /* PassthroughRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D48109A20EA3D100048B3CF /* PassthroughRequest.h */; };
 		3D5FE2402088DE9500A4C720 /* WishRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DA02088810A00616E4E /* WishRequest.h */; };
 		3D5FE2412088DE9500A4C720 /* MistApiResponseHandler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DB02088810A00616E4E /* MistApiResponseHandler.h */; };
 		3D5FE2422088DE9500A4C720 /* MistRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3D2F4DB12088810A00616E4E /* MistRequest.h */; };
@@ -191,6 +193,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				3D48109D20EA54AB0048B3CF /* PassthroughRequest.h in CopyFiles */,
 				3DCE5FA5208E2A1700372643 /* Sandbox.h in CopyFiles */,
 				3D5FE2442089D80600A4C720 /* MistPort.h in CopyFiles */,
 				3D5FE2402088DE9500A4C720 /* WishRequest.h in CopyFiles */,
@@ -420,6 +423,8 @@
 		3D2F4DB12088810A00616E4E /* MistRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MistRequest.h; sourceTree = "<group>"; };
 		3D2F4DBB2088821300616E4E /* MistPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MistPort.h; sourceTree = "<group>"; };
 		3D2F4DBC2088826900616E4E /* MistPort.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MistPort.m; sourceTree = "<group>"; };
+		3D48109A20EA3D100048B3CF /* PassthroughRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassthroughRequest.h; sourceTree = "<group>"; };
+		3D48109B20EA3DBF0048B3CF /* PassthroughRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PassthroughRequest.m; sourceTree = "<group>"; };
 		3D5FE2152088D48A00A4C720 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3DAC75432085DDC400A9CEC7 /* libMistApi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMistApi.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DCE5FA2208E038700372643 /* Sandbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sandbox.h; sourceTree = "<group>"; };
@@ -708,6 +713,8 @@
 				3D2F4DA22088810A00616E4E /* MistRequest.m */,
 				3D2F4DA32088810A00616E4E /* request */,
 				3D2F4DAE2088810A00616E4E /* MistApi.m */,
+				3D48109A20EA3D100048B3CF /* PassthroughRequest.h */,
+				3D48109B20EA3DBF0048B3CF /* PassthroughRequest.m */,
 				3D2F4DAF2088810A00616E4E /* WishRequest.m */,
 				3D2F4DB02088810A00616E4E /* MistApiResponseHandler.h */,
 				3D2F4DB12088810A00616E4E /* MistRequest.h */,
@@ -870,6 +877,7 @@
 				3D2F4D3F20887C4300616E4E /* wish_api_relay.c in Sources */,
 				3D2F4C6E2085E89500616E4E /* x509_crt.c in Sources */,
 				3D2F4DB82088810A00616E4E /* MistApi.m in Sources */,
+				3D48109C20EA3DBF0048B3CF /* PassthroughRequest.m in Sources */,
 				3D2F4CDE20887BB100616E4E /* sandbox.c in Sources */,
 				3D2F4DB42088810A00616E4E /* WldList.m in Sources */,
 				3D2F4CEB20887BCB00616E4E /* wish_app.c in Sources */,
