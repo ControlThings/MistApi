@@ -692,26 +692,30 @@ int ios_port_main(void) {
                     int newsockfd = accept(serverfd, NULL, NULL);
                     if (newsockfd < 0) {
                         perror("on accept");
+#if DEBUG == 1
                         abort();
-                    }
-                    socket_set_nonblocking(newsockfd);
-                    /* Start the wish core with null IDs. 
-                     * The actual IDs will be established during handshake
-                     * */
-                    uint8_t null_id[WISH_ID_LEN] = { 0 };
-                    wish_connection_t* connection = wish_connection_init(core, null_id, null_id);
-                    if (connection == NULL) {
-                        /* Fail... no more contexts in our pool */
-                        printf("No new Wish connections can be accepted!\n");
-                        close(newsockfd);
+#endif
                     }
                     else {
-                        int *fd_ptr = malloc(sizeof(int));
-                        *fd_ptr = newsockfd;
-                        /* New wish connection can be accepted */
-                        wish_core_register_send(core, connection, write_to_socket, fd_ptr);
-                        //WISHDEBUG(LOG_CRITICAL, "Accepted TCP connection %d", newsockfd);
-                        wish_core_signal_tcp_event(core, connection, TCP_CLIENT_CONNECTED);
+                        socket_set_nonblocking(newsockfd);
+                        /* Start the wish core with null IDs. 
+                         * The actual IDs will be established during handshake
+                         * */
+                        uint8_t null_id[WISH_ID_LEN] = { 0 };
+                        wish_connection_t* connection = wish_connection_init(core, null_id, null_id);
+                        if (connection == NULL) {
+                            /* Fail... no more contexts in our pool */
+                            printf("No new Wish connections can be accepted!\n");
+                            close(newsockfd);
+                        }
+                        else {
+                            int *fd_ptr = malloc(sizeof(int));
+                            *fd_ptr = newsockfd;
+                            /* New wish connection can be accepted */
+                            wish_core_register_send(core, connection, write_to_socket, fd_ptr);
+                            //WISHDEBUG(LOG_CRITICAL, "Accepted TCP connection %d", newsockfd);
+                            wish_core_signal_tcp_event(core, connection, TCP_CLIENT_CONNECTED);
+                        }
                     }
                 }
             }
