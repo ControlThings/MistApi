@@ -221,7 +221,6 @@ static void sandbox_login_cb(rpc_client_req* req, void *ctx, const uint8_t *payl
         /* Call sandbox_api_cancel here */
         if (found == true) {
             //NSLog(@"Cancelling sandbox-rpc-id %i, which is rewritten as rpc-id %i", sandbox_rpc_id, rpc_id);
-            //sandboxed_api_request_cancel(get_mist_api(), self.sandboxId.bytes, rpc_id);
         }
         else {
             NSLog(@"Cancelling sandbox-rpc-id %i, but rpc-id not found!", sandbox_rpc_id);
