@@ -172,6 +172,7 @@
 		3DB976CF215A7A4100C761DA /* cipher.c in Sources */ = {isa = PBXBuildFile; fileRef = 3DB97689215A7A4100C761DA /* cipher.c */; };
 		3DB976D0215A7A4100C761DA /* ecdsa.c in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9768A215A7A4100C761DA /* ecdsa.c */; };
 		3DB976D3215A7AB100C761DA /* sha512.c in Sources */ = {isa = PBXBuildFile; fileRef = 3DB976D2215A7AB100C761DA /* sha512.c */; };
+		3DB976EC215D0B3D00C761DA /* mist_api_persistence.c in Sources */ = {isa = PBXBuildFile; fileRef = 3DB976EA215D0B3D00C761DA /* mist_api_persistence.c */; };
 		3DCE5FA4208E040C00372643 /* Sandbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DCE5FA3208E040C00372643 /* Sandbox.m */; };
 		3DCE5FA5208E2A1700372643 /* Sandbox.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3DCE5FA2208E038700372643 /* Sandbox.h */; };
 		3DF201872093559D00B33336 /* mist_api_commission.c in Sources */ = {isa = PBXBuildFile; fileRef = 3DF201862093559C00B33336 /* mist_api_commission.c */; };
@@ -429,6 +430,8 @@
 		3DB9768A215A7A4100C761DA /* ecdsa.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecdsa.c; sourceTree = "<group>"; };
 		3DB976D1215A7AB100C761DA /* sha512.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha512.h; sourceTree = "<group>"; };
 		3DB976D2215A7AB100C761DA /* sha512.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha512.c; sourceTree = "<group>"; };
+		3DB976EA215D0B3D00C761DA /* mist_api_persistence.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mist_api_persistence.c; path = "mist-c99/src/mist_api_persistence.c"; sourceTree = SOURCE_ROOT; };
+		3DB976EB215D0B3D00C761DA /* mist_api_persistence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mist_api_persistence.h; path = "mist-c99/src/mist_api_persistence.h"; sourceTree = SOURCE_ROOT; };
 		3DCE5FA2208E038700372643 /* Sandbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sandbox.h; sourceTree = "<group>"; };
 		3DCE5FA3208E040C00372643 /* Sandbox.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sandbox.m; sourceTree = "<group>"; };
 		3DF201852093559C00B33336 /* mist_api_commission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mist_api_commission.h; sourceTree = "<group>"; };
@@ -578,6 +581,8 @@
 		3D2F4D6C20887C6800616E4E /* src */ = {
 			isa = PBXGroup;
 			children = (
+				3DB976EA215D0B3D00C761DA /* mist_api_persistence.c */,
+				3DB976EB215D0B3D00C761DA /* mist_api_persistence.h */,
 				3DB976D2215A7AB100C761DA /* sha512.c */,
 				3DB976D1215A7AB100C761DA /* sha512.h */,
 				3D2F4D6E20887C6800616E4E /* precomp_data.h */,
@@ -890,6 +895,7 @@
 				3D2F4CEB20887BCB00616E4E /* wish_app.c in Sources */,
 				3D2F4CEA20887BCB00616E4E /* wish_protocol.c in Sources */,
 				3DF201872093559D00B33336 /* mist_api_commission.c in Sources */,
+				3DB976EC215D0B3D00C761DA /* mist_api_persistence.c in Sources */,
 				3D2F4D9820887D5B00616E4E /* network.c in Sources */,
 				3DB976C1215A7A4100C761DA /* x509.c in Sources */,
 				3DB9769B215A7A4100C761DA /* aesni.c in Sources */,
