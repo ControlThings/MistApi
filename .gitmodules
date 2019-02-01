@@ -1,6 +1,6 @@
 [submodule "wish-c99"]
 	path = wish-c99
-	url = https://github.com/WishCore/wish-c99.git
+	url = https://github.com/ControlThings/wish-c99.git
 [submodule "mist-c99"]
 	path = mist-c99
 	url = foremost.controlthings.fi:/ct/mist/mist-c99
