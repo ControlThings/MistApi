@@ -41,6 +41,7 @@
 #endif
 
 #include "port_service_ipc.h"
+#include "port_dns.h"
 
 wish_core_t core_inst;
 
@@ -103,6 +104,21 @@ void connected_cb_relay(wish_connection_t* connection) {
 void connect_fail_cb(wish_connection_t* connection) {
     printf("Connect fail... \n");
     wish_core_signal_tcp_event(connection->core, connection, TCP_DISCONNECTED);
+}
+
+int wish_open_connection_dns(wish_core_t* core, wish_connection_t* connection, char* host, uint16_t port, bool via_relay) {
+    connection->curr_transport_state = TRANSPORT_STATE_RESOLVING;
+    
+    connection->core = core;
+    connection->remote_port = port;
+    connection->via_relay = via_relay;
+    int ret = port_dns_start_resolving(core, connection, NULL, host);
+    if (ret != 0) {
+        printf("Name resolution failure \n");
+        wish_core_signal_tcp_event(core, connection, TCP_DISCONNECTED);
+    }
+    
+    return 0;
 }
 
 int wish_open_connection(wish_core_t* core, wish_connection_t* connection, wish_ip_addr_t *ip, uint16_t port, bool relaying) {
@@ -396,20 +412,6 @@ void ios_port_set_name(char *name) {
     strncpy(test_alias, name, WISH_ALIAS_LEN);
 }
 
-static void create_test_identities() {
-    
-    if (core->num_ids == 0) {
-        if (strnlen(test_alias, WISH_ALIAS_LEN) == 0) {
-            ios_port_set_name("iOS user");
-        }
-        printf("Creating identity: ");
-        wish_identity_t id;
-        wish_create_local_identity(core, &id, test_alias);
-        wish_save_identity_entry(&id);
-        wish_core_update_identities(core);
-    }
-}
-
 void ios_port_setup_platform(void) {
     wish_platform_set_malloc(malloc);
     wish_platform_set_realloc(realloc);
@@ -464,6 +466,7 @@ int ios_port_main(void) {
     port_service_ipc_init(core);
 
     while (1) {
+        port_dns_poll_resolvers();
         /* The filedescriptor to be polled for reading */
         fd_set rfds;
         /* The filedescriptor to be polled for writing */
@@ -502,6 +505,9 @@ int ios_port_main(void) {
                 else if (relay->curr_state == WISH_RELAY_CLIENT_WAIT_RECONNECT) {
                     /* connect to relay server has failed or disconnected and we wait some time before retrying */
                 }
+                else if (relay->curr_state == WISH_RELAY_CLIENT_RESOLVING) {
+                    /* Don't do anything as the resolver is resolving. relay->sockfd is not valid as it has not yet been initted! */
+                }
                 else if (relay->curr_state != WISH_RELAY_CLIENT_INITIAL) {
                     if (relay->sockfd != -1) {
                         FD_SET(relay->sockfd, &rfds);
@@ -517,6 +523,11 @@ int ios_port_main(void) {
             if (ctx->context_state == WISH_CONTEXT_FREE) {
                 continue;
             }
+            else if (ctx->curr_transport_state == TRANSPORT_STATE_RESOLVING) {
+                /* The transport host addr is being resolved, sockfd is not valid and indeed should not be added to any of the sets! */
+                continue;
+            }
+            
             int sockfd = *((int *) ctx->send_arg);
             if (ctx->curr_transport_state == TRANSPORT_STATE_CONNECTING) {
                 /* If the socket has currently a pending connect(), set

@@ -212,6 +212,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3D21B27722047539008B579F /* port_dns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = port_dns.h; sourceTree = "<group>"; };
+		3D21B2D222084D6A008B579F /* relay_client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = relay_client.h; sourceTree = "<group>"; };
 		3D2F4CBF20887BB000616E4E /* mist_app_control.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mist_app_control.h; sourceTree = "<group>"; };
 		3D2F4CC020887BB000616E4E /* mist_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mist_api.h; sourceTree = "<group>"; };
 		3D2F4CC120887BB000616E4E /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
@@ -618,6 +620,7 @@
 		3D2F4D8C20887D5A00616E4E /* ios_port */ = {
 			isa = PBXGroup;
 			children = (
+				3D21B27722047539008B579F /* port_dns.h */,
 				3D2F4D8D20887D5A00616E4E /* fs_port.h */,
 				3D2F4D8E20887D5A00616E4E /* network.c */,
 				3D2F4D8F20887D5A00616E4E /* port_service_ipc.h */,
@@ -629,6 +632,7 @@
 				3D2F4D9520887D5A00616E4E /* port_service_ipc.c */,
 				3D2F4D9620887D5A00616E4E /* wish_port_config.h */,
 				3D2F4D9720887D5A00616E4E /* app.c */,
+				3D21B2D222084D6A008B579F /* relay_client.h */,
 			);
 			path = ios_port;
 			sourceTree = "<group>";
