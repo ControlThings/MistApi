@@ -146,6 +146,7 @@ static int next_resolver_id;
                 NSLog(@"Found resolver entry for id %i", resolver_id);
                 elem->finished = true;
                 elem->result_ip = ip;
+                break;
             }
         }
          
@@ -165,6 +166,7 @@ static int next_resolver_id;
             if (elem->resolver_id == resolver_id) {
                 elem->finished = true;
                 elem->result_ip = NULL;
+                break;
             }
         }
         
@@ -172,7 +174,6 @@ static int next_resolver_id;
         [dnsResolverLock unlock];
     }
     NSLog(@"Resolver thread exitb, id %i", resolver_id);
-    [[NSThread currentThread] cancel];
 }
 
 
@@ -380,6 +381,7 @@ int port_dns_start_resolving(wish_core_t *core, wish_connection_t *conn, wish_re
         return -1;
     }
     
+    memset(new_server, 0, sizeof (struct dns_resolver));
     int resolver_id = next_resolver_id++;
     new_resolver->finished = false;
     new_resolver->result_ip = NULL;
