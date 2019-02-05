@@ -614,6 +614,11 @@ int ios_port_main(void) {
                 if (ctx->context_state == WISH_CONTEXT_FREE) {
                     continue;
                 }
+                else if (ctx->curr_transport_state == TRANSPORT_STATE_RESOLVING) {
+                    /* The transport host addr is being resolved, sockfd is not valid */
+                    continue;
+                }
+                
                 int sockfd = *((int *)ctx->send_arg);
                 if (FD_ISSET(sockfd, &rfds)) {
                     /* The Wish connection socket is now readable. Data

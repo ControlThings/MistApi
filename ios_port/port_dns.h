@@ -11,6 +11,7 @@ struct dns_resolver {
     wish_relay_client_t *relay;
     int resolver_id;
     wish_ip_addr_t *result_ip;
+    char qname[PORT_DNS_MAX_HOSTLEN];
     struct dns_resolver *next;
 };
 

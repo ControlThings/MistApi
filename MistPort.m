@@ -39,6 +39,7 @@ static BOOL mistLaunchedOnce = NO;
 
 id mistPort;
 
+static NSThread *resolverThread;
 static NSLock *dnsResolverLock;
 static struct dns_resolver *resolvers = NULL;
 static int next_resolver_id;
@@ -87,7 +88,10 @@ static int next_resolver_id;
     [wishThread setName:@"Wish core"];
     [wishThread start];
     
-
+    resolverThread = [[NSThread alloc] initWithTarget:self
+                                                       selector:@selector(resolverLooper:)
+                                                         object:nil];
+    [resolverThread start];
 }
 
 +(void)launchMistApi {
@@ -101,71 +105,57 @@ static int next_resolver_id;
     [MistApi startMistApi:@"MistApi"];
 }
 
-+(void)startResolving:(id) parameter {
-    
-    NSArray *resolverThreadArgs = parameter;
-    NSString *hostnameNSString = resolverThreadArgs[0];
-    NSNumber *resolverIdNSNumber = resolverThreadArgs[1];
-    
-    
++(void)resolverLooper:(id) parameter {
     int port = 37001;
-    char host[PORT_DNS_MAX_HOSTLEN+1];
-    memset(host, 0, PORT_DNS_MAX_HOSTLEN+1);
-    int resolver_id = 0;
-   
     
-    [hostnameNSString getCString:host maxLength:PORT_DNS_MAX_HOSTLEN encoding:NSUTF8StringEncoding];
-    resolver_id = [resolverIdNSNumber intValue];
-    NSLog(@"Resolver thread executing, %s, id %i", host, resolver_id);
-    
-    /* This is a filter. Specify that we are interested only in IPv4 addresses. */
-    struct addrinfo addrinfo_filter = { .ai_family = AF_INET, .ai_socktype = SOCK_STREAM };
-    struct addrinfo *addrinfo_res = NULL;
-    NSLog(@"Resolver thread executing still -2, id %i", resolver_id);
     size_t port_str_max_len = 5 + 1;
     char port_str[port_str_max_len];
-    NSLog(@"Resolver thread executing still -1, id %i", resolver_id);
     snprintf(port_str, port_str_max_len, "%i", port);
-    NSLog(@"Resolver thread executing still 0, id %i", resolver_id);
-    int addr_err = getaddrinfo(host, port_str, &addrinfo_filter, &addrinfo_res);
-    NSLog(@"Resolver thread executing still 2, id %i", resolver_id);
-    if (addr_err == 0) {
-        /* Resolving was a success. Note: we should be getting only IPv4 addresses because of the filter. */
-        char* ip_str = inet_ntoa(((struct sockaddr_in*)addrinfo_res->ai_addr)->sin_addr);
-        wish_ip_addr_t *ip = malloc(sizeof(wish_ip_addr_t));
-        NSLog(@"Resolve result. %s id %i", ip_str, resolver_id);
-
-        wish_parse_transport_ip(ip_str, 0, ip);
+ 
+    while (true) {
+        
+        [NSThread sleepForTimeInterval: 0.1];
         
         /* Acquire lock */
         [dnsResolverLock lock];
-        /* Lookup from the list of resolvings the structure with id result_id, and set result ip */
-        struct dns_resolver *elem = NULL;
-        LL_FOREACH(resolvers, elem) {
-            if (elem->resolver_id == resolver_id) {
-                NSLog(@"Found resolver entry for id %i", resolver_id);
-                elem->finished = true;
-                elem->result_ip = ip;
-                break;
-            }
-        }
-         
-        /* Release lock */
-        [dnsResolverLock unlock];
-        freeaddrinfo(addrinfo_res);
-    }
-    else {
-        printf("DNS resolve fail\n");
-        /* Note: Don't call wish_close_connection() here, as it will do (platform-dependent) things set up by wish_open_connection(), which has not been called in this case. */
-        struct dns_resolver *elem = NULL;
         
-        /* Acquire lock */
-        [dnsResolverLock lock];
+        struct dns_resolver *elem = NULL;
+        struct dns_resolver *tmp = NULL;
+        LL_FOREACH_SAFE(resolvers, elem, tmp) {
+            if (elem->finished == false) {
+                NSLog(@"Found resolver entry for %s %p %p", elem->qname, elem->conn, elem->relay);
 
-        LL_FOREACH(resolvers, elem) {
-            if (elem->resolver_id == resolver_id) {
-                elem->finished = true;
-                elem->result_ip = NULL;
+                struct addrinfo addrinfo_filter = { .ai_family = AF_INET, .ai_socktype = SOCK_STREAM };
+                struct addrinfo *addrinfo_res = NULL;
+                int addr_err = getaddrinfo(elem->qname, port_str, &addrinfo_filter, &addrinfo_res);
+                if (addr_err == 0) {
+                    /* Resolving was a success. Note: we should be getting only IPv4 addresses because of the filter. */
+
+                    wish_ip_addr_t *ip = malloc(sizeof(wish_ip_addr_t));
+                    //NSLog(@"Resolve result. %s", ip_str);
+                    
+                    union ip {
+                        uint32_t as_long;
+                        uint8_t as_bytes[4];
+                    } tmpip;
+                    /* XXX Don't convert to host byte order here. Wish ip addresses
+                     * have network byte order */
+
+                    struct sockaddr_in *addr4 = (struct sockaddr_in*)addrinfo_res->ai_addr;
+                    tmpip.as_long = addr4->sin_addr.s_addr;
+                    memcpy(ip->addr, tmpip.as_bytes, 4);
+
+                    elem->finished = true;
+                    elem->result_ip = ip;
+                }
+                else {
+                    NSLog(@"DNS getaddrinfo fail, %s %p %p", elem->qname, elem->conn, elem->relay);
+                    elem->finished = true;
+                    elem->result_ip = NULL;
+                
+                }
+
+                free(addrinfo_res);
                 break;
             }
         }
@@ -173,7 +163,6 @@ static int next_resolver_id;
         /* Release lock */
         [dnsResolverLock unlock];
     }
-    NSLog(@"Resolver thread exitb, id %i", resolver_id);
 }
 
 
@@ -304,84 +293,15 @@ void mist_port_wifi_join(mist_api_t* mist_api, const char* ssid, const char* pas
 
 #endif //TARGET_OS_IPHONE && !TARGET_OS_SIMULATOR
 
-#if 0
-void DNSResolverHostClientCallback ( CFHostRef theHost, CFHostInfoType typeInfo, const CFStreamError *error, void *info) {
-    
-    int resolver_id = *((int*) info);
-    free(info);
-    
-    Boolean addrsAvailable = NO;
-    CFArrayRef results = CFHostGetAddressing(theHost, &addrsAvailable);
-    if (results && addrsAvailable) {
-        NSLog(@"Resolver id %i finished with addresses, error %i", resolver_id, error->error );
-        CFIndex i, c = CFArrayGetCount(results);
-        
-        for (i = 0; i < c; i++) {
-            struct sockaddr *address = (struct sockaddr *)CFDataGetBytePtr(CFArrayGetValueAtIndex(results, i));
-            
-            if (address->sa_family == AF_INET) {
-                struct sockaddr_in *addr4 = (struct sockaddr_in *) address;
-                NSLog(@"Lookup resulted in %s", inet_ntoa(addr4->sin_addr));
-                
-                union ip {
-                    uint32_t as_long;
-                    uint8_t as_bytes[4];
-                } ip;
-                /* XXX Don't convert to host byte order here. Wish ip addresses
-                 * have network byte order */
-                ip.as_long = addr4->sin_addr.s_addr;
-                wish_ip_addr_t ip_addr;
-                memcpy(&ip_addr.addr, ip.as_bytes, 4);
-                
-                /* The IP now as wish_ip_addr */
-                
-            }
-            else if (address->sa_family == AF_INET6) {
-                //Not supported by Wish currently
-                NSLog(@"Returned sockaddr is inet6");
-            }
-        }
-        
-    }
-    else {
-        NSLog(@"Resolver id %i failed to get any addresses", resolver_id);
-    }
-}
-
-void startResolving(char* hostname, int resolve_id) {
-    CFHostRef host = CFHostCreateWithName(NULL, CFStringCreateWithCString(NULL, hostname, kCFStringEncodingUTF8));
-    
-    int *info = malloc(sizeof(int));
-    *info = resolve_id;
-    CFHostClientContext ctx = {.info = info};
-    CFHostSetClient(host, DNSResolverHostClientCallback, &ctx);
-    CFRunLoopRef runloop = CFRunLoopGetCurrent();
-    CFHostScheduleWithRunLoop(host, runloop, CFSTR("DNSResolverRunLoopMode"));
-    
-    CFStreamError error;
-    Boolean didStart = CFHostStartInfoResolution(host, kCFHostAddresses, &error);
-    if (!didStart) {
-        //error should now have some data
-        NSLog(@"Resolving failed to start, code: %i", error.error);
-    }
-    else {
-        
-        NSLog(@"Resolving %s started", hostname);
-    }
-    
-    
-}
-#endif
-
 int port_dns_start_resolving(wish_core_t *core, wish_connection_t *conn, wish_relay_client_t *relay, char *qname) {
-    NSLog(@"port_dns_start_resolving");
+    NSLog(@"port_dns_start_resolving %s", qname);
     struct dns_resolver *new_resolver = malloc(sizeof (struct dns_resolver));
     if (new_resolver == NULL) {
         NSLog(@"Insufficient resources when resolving %s %p %p", qname, conn, relay);
         return -1;
     }
     
-    memset(new_server, 0, sizeof (struct dns_resolver));
+    memset(new_resolver, 0, sizeof (struct dns_resolver));
     int resolver_id = next_resolver_id++;
     new_resolver->finished = false;
     new_resolver->result_ip = NULL;
@@ -389,12 +309,7 @@ int port_dns_start_resolving(wish_core_t *core, wish_connection_t *conn, wish_re
     new_resolver->conn = conn;
     new_resolver->relay = relay;
     new_resolver->resolver_id = resolver_id;
-    
-    /* Acquire lock */
-    [dnsResolverLock lock];
-    LL_APPEND(resolvers, new_resolver);
-    /* Release lock */
-    [dnsResolverLock unlock];
+    memcpy(new_resolver->qname, qname, strnlen(qname, PORT_DNS_MAX_HOSTLEN));
     
     if (new_resolver->conn && new_resolver->relay) {
         //It is as error to invoke this function when with both conn != NULL and relay != NULL
@@ -402,21 +317,18 @@ int port_dns_start_resolving(wish_core_t *core, wish_connection_t *conn, wish_re
         return -1;
     }
     
-    NSString *hostnameNSString = [[NSString alloc] initWithUTF8String:qname];
-    NSNumber *resolverIdNSNumber = [NSNumber numberWithInteger:resolver_id];
+    /* Acquire lock */
+    [dnsResolverLock lock];
     
-    NSArray *resolverThreadArgs = @[hostnameNSString, resolverIdNSNumber];
+    LL_APPEND(resolvers, new_resolver);
     
-    NSThread *resolverThread = [[NSThread alloc] initWithTarget:mistPort
-                                                selector:@selector(startResolving:)
-                                                object:resolverThreadArgs];
-    [resolverThread start];
-    NSLog(@"port_dns_start_resolving out");
+    /* Release lock */
+    [dnsResolverLock unlock];
+    
     return 0;
 }
 
 int port_dns_poll_resolvers(void) {
-    NSLog(@"poll resolvers in");
     bool found = false;
     struct dns_resolver *elem = NULL;
     struct dns_resolver *tmp = NULL;
@@ -436,9 +348,11 @@ int port_dns_poll_resolvers(void) {
     [dnsResolverLock unlock];
     
     if (found) {
-        NSLog(@"Found finished resolver entry, id %i %p %p", elem->resolver_id, elem->conn, elem->relay);
+        NSLog(@"Name resolution finished, id %i %p %p", elem->resolver_id, elem->conn, elem->relay);
         if (elem->conn) {
+
             if (elem->result_ip != NULL) {
+
                 wish_open_connection(elem->core, elem->conn, elem->result_ip,
                                      elem->conn->remote_port, elem->conn->via_relay);
                 free(elem->result_ip);
@@ -465,7 +379,5 @@ int port_dns_poll_resolvers(void) {
         free(elem);
     }
     
-    
-    NSLog(@"poll resolvers out");
     return 0;
 }
