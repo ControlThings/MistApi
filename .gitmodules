@@ -3,4 +3,4 @@
 	url = https://github.com/ControlThings/wish-c99.git
 [submodule "mist-c99"]
 	path = mist-c99
-	url = git@github.com:ControlThings/mist-c99.git
+	url = https://github.com/ControlThings/mist-c99.git
